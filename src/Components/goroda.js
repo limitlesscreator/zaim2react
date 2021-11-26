@@ -1,4 +1,5 @@
 import React, {useReducer, useState} from 'react';
+import {useDispatch, useSelector} from "react-redux";
 
 let dataLinks = [
     {
@@ -1018,33 +1019,15 @@ let dataЮ = dataLinks.filter(el => el['Город'][0] === 'Ю')
 let dataЯ = dataLinks.filter(el => el['Город'][0] === 'Я')
 
 
-export const reducer = (stateCity, action) => {
-    switch (action.type){
-        case 'changeCity' : {
-            console.log(stateCity.city)
-            return {
-                city: action.payload
-            }
-        }
-        default : {
-            return stateCity
-        }
-    }
-}
+
 
 export const Goroda = () => {
-    const [stateCity,dispatch] = useReducer(reducer, {
-        city: 'В Москве'
-    })
+    const dispatch = useDispatch()
+    const city = useSelector(state => state.city)
 
-    function changeCity(city){
-        dispatch({
-            type: 'changeCity',
-            payload: city
-        })
+    const changeCity = (newCity) => {
+        dispatch({type: 'CHANGE_CITY', payload:newCity})
     }
-    console.log(stateCity.city)
-
 
     return (
         <div className={'row'}>
@@ -1054,11 +1037,11 @@ export const Goroda = () => {
                     {
                         dataA.map(el => {
                             return (
-                                <ul onClick={() => {changeCity('Питер')}} className='cities-ul' itemScope='itemscope'
+                                <ul onClick={() => {changeCity(el['undefined'])}} className='cities-ul' itemScope='itemscope'
                                     itemType="http://schema.org/SiteNavigationElement">
-                                    <li className='cities-li'><div className="cities-a " itemprop='url'
+                                    <li className='cities-li'><a className="cities-a " itemProp='url'
                                                                  href={el['Поддомен']}> {el["Город"]}
-                                    </div></li>
+                                    </a></li>
                                 </ul>
                             )
                         })
